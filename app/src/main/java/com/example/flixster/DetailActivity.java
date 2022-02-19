@@ -24,7 +24,7 @@ import okhttp3.Headers;
 
 public class DetailActivity extends YouTubeBaseActivity {
     private static final String YOUTUBE_API_KEY = "AIzaSyBWLI0LvdaCfs20wLZ4h6sb_Ae-3cMIbxc";
-    public static final String VIDEOS_URL="https://api.themoviedb.org/3/movie/%d/videos?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
+    public static final String VIDEOS_URL="https://api.themoviedb.org/3/movie/%s/videos?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
 
     TextView tvTitle;
     TextView tvOverview;
@@ -48,7 +48,7 @@ public class DetailActivity extends YouTubeBaseActivity {
         ratingBar.setRating((float) movie.getRating());
 
         AsyncHttpClient client=new AsyncHttpClient();
-        client.get(String.format(VIDEOS_URL,634649), new JsonHttpResponseHandler() {
+        client.get(String.format(VIDEOS_URL, movie.getId()), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 try {
@@ -56,7 +56,7 @@ public class DetailActivity extends YouTubeBaseActivity {
                     if (results.length() == 0) {
                         return;
                     }
-                    String youtubeKey =results.getJSONObject(0).getString("key");
+                    String youtubeKey = results.getJSONObject(0).getString("key");
                     Log.d("DetailActivity",youtubeKey);
                     initializeYoutube(youtubeKey);
                 }catch (JSONException e) {
@@ -77,7 +77,7 @@ public class DetailActivity extends YouTubeBaseActivity {
 
     }
     private void initializeYoutube(final String youtubeKey) {
-        youTubePlayerView.initialize("YOUR API KEY", new YouTubePlayer.OnInitializedListener() {
+        youTubePlayerView.initialize(YOUTUBE_API_KEY, new YouTubePlayer.OnInitializedListener() {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
                 Log.d("DetailActivity","onInitializationSuccess");
@@ -87,6 +87,7 @@ public class DetailActivity extends YouTubeBaseActivity {
             @Override
             public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
                 Log.d("DetailActivity","onInitializationFailure");
+                Log.d("DetailActivity",youTubeInitializationResult.toString());
             }
         });
 
