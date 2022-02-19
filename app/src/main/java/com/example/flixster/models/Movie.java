@@ -13,6 +13,7 @@ public class Movie {
     String posterPath;
     String title;
     String overview;
+    String id;
     double rating;
 
     // empty constructor needed by the Parceler library
@@ -24,7 +25,7 @@ public class Movie {
         title=jsonObject.getString("title");
         overview = jsonObject.getString("overview");
         rating=jsonObject.getDouble("vote_average");
-
+        id = jsonObject.getString("id");
     }
 
     public static List<Movie> fromJsonArray(JSONArray movieJsonArray) throws JSONException {
@@ -34,6 +35,7 @@ public class Movie {
         }
         return movies;
     }
+
 
     public String getPosterPath() {
         return String.format("https://image.tmdb.org/t/p/w342/%s",posterPath);
@@ -51,5 +53,9 @@ public class Movie {
 
     public double getRating() {
         return rating;
+    }
+
+    public String getId() {
+        return id;
     }
 }
