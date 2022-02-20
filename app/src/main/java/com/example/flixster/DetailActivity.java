@@ -47,23 +47,26 @@ public class DetailActivity extends YouTubeBaseActivity {
         tvOverview.setText(movie.getOverview());
         ratingBar.setRating((float) movie.getRating());
 
+        Log.d("DetailActivity","Entered detailactivity");
         AsyncHttpClient client=new AsyncHttpClient();
         client.get(String.format(VIDEOS_URL, movie.getId()), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.d("DetailActivity","entered successfuly");
                 try {
                     JSONArray results = json.jsonObject.getJSONArray("results");
                     if (results.length() == 0) {
                         return;
                     }
+
                     String youtubeKey = results.getJSONObject(0).getString("key");
                     Log.d("DetailActivity",youtubeKey);
                     initializeYoutube(youtubeKey);
                 }catch (JSONException e) {
+
                     Log.e("DetailActivity","Failed to parse JSON",e);
                    // e.printStackTrace();
                 }
-
             }
 
             @Override
@@ -71,9 +74,6 @@ public class DetailActivity extends YouTubeBaseActivity {
                 Log.d("DetailActivity","onFailure");
             }
         });
-
-
-
 
     }
     private void initializeYoutube(final String youtubeKey) {
@@ -88,6 +88,7 @@ public class DetailActivity extends YouTubeBaseActivity {
             public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
                 Log.d("DetailActivity","onInitializationFailure");
                 Log.d("DetailActivity",youTubeInitializationResult.toString());
+
             }
         });
 
